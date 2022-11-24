@@ -482,7 +482,7 @@ module.exports = function (client) {
                                 "device": client.device?.replace(/Discord/g, '')
                             },
                             "shard": [0, 1],
-                            "intents": client``.intents,
+                            "intents": client.intents,
                         }
                     }));
             };
