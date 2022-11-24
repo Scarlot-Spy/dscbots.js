@@ -516,10 +516,10 @@ module.exports = function (client) {
             RESUMEABLE[code] ? (() => {
                 session.resume_seq = session.seq;
                 session.resuming = true;
-                setTimeout(function () { sessionStart(session.resume_gateway_url, true) }, 1000);
+                setTimeout(function () { ClientStart(session.resume_gateway_url, true) }, 1000);
             })() : (() => {
                 session.restarting = true;
-                setTimeout(function () { sessionStart(gateway_url1, true) }, 1000);
+                setTimeout(function () { ClientStart(gateway_url, true) }, 1000);
             })()
         }, { once: true });
     }
