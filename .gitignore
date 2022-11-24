@@ -1,0 +1,2 @@
+# Remove sensitive information from publish.
+.vscode/*
