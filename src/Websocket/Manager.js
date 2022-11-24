@@ -431,7 +431,7 @@ module.exports = function (client) {
                     }, session.heartbeat_interval);
                     if (process.env.DEBUG == "true")
                         console.info(timestamp.default(), 'Gateway: Resumed', payloadData);
-                    clientData.emit('resumed', payloadData);
+                    client.emit('resumed', payloadData);
                 }
             }
 
@@ -440,7 +440,7 @@ module.exports = function (client) {
             data_op[0] = () => {
                 try {
                     (data_t[data.t]) ? data_t[data.t]() : (async () => {
-                        events.emit(`${data.t}`.toLowerCase(), payloadData);
+                        client.emit(`${data.t}`.toLowerCase(), payloadData);
                     })();
                 } catch (e) {
                     new DiscordError(e.stack.toString())
