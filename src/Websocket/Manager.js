@@ -16,7 +16,7 @@ module.exports = function (client) {
     var session = {
         seq: null,
         resuming: false,
-        heartbeatACK: false
+        heartbeatACK: true
     };
     var { RESUMEABLE, activities_id, activities_name, Formats } = require('./Enum')
 
@@ -129,7 +129,7 @@ module.exports = function (client) {
                         }, 1000)
                     }
 
-                    if (reconnect != true || reconnect == false) {
+                    if (reconnection != true || reconnection == false) {
                         client.websocket.ping = 0;
                         client.readyCB ? client.readyCB() : null;
                     }
@@ -460,6 +460,7 @@ module.exports = function (client) {
 
             data_op[9] = async () => {
                 if (process.env.DEBUG == "true")
+                    console.log(data)
                     console.log('OpCode: 9 -- data.d', data.d);
                 (data.d) ? socketEmitter.close(5000) : socketEmitter.close(1011);
             };
@@ -484,7 +485,6 @@ module.exports = function (client) {
                 }
 
                 session.heartbeat_interval = payloadData.heartbeat_interval;
-                console.log(client)
 
                 session.resuming ? socketEmitter.send(JSON.stringify({ "op": 6, "d": { "token": client.Token, "session_id": session.resume_session_id, "seq": session.resume_seq } }))
                     : socketEmitter.send(JSON.stringify({
@@ -497,7 +497,7 @@ module.exports = function (client) {
                                 "device": client.device?.replace(/Discord/g, '')
                             },
                             "shard": [0, 1],
-                            "intents": client.intents,
+                            "intents": client.Intents,
                         }
                     }));
             };
