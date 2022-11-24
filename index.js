@@ -5,8 +5,10 @@ if (typeof process !== 'undefined' && parseInt(process.versions.node.split('.')[
 };
 const Permissions = require('./src/permissions.js');
 const BaseClient = require('./src/Base/client');
+const Intents = require('./src/intents.js')
 
 module.exports = {
     Permissions,
-    Bot: BaseClient
+    Bot: BaseClient,
+    Intents
 };
