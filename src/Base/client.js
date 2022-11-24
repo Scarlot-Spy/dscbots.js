@@ -22,11 +22,11 @@ class Client extends EventEmitter {
             Authorization: `Bot ${this.Token}`
         })
             .then(Response => {
-                if (typeof this.intents != 'number' && this.intents instanceof Array) {
-                    const intents = form(this.intents)
-                    this.intents = intents
-                } else if (!(this.intents instanceof Array) && typeof intents == 'number') {
-                    this.intents = intents;
+                if (typeof this.Intents != 'number' && this.Intents instanceof Array) {
+                    const intents = form(this.Intents)
+                    this.Intents = intents
+                } else if (!(this.Intents instanceof Array) && typeof intents == 'number') {
+                    this.Intents = intents;
                 }
                 Response.Token = this.Token
                 this.readyCB = cb ? cb : null;

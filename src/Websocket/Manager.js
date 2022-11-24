@@ -92,7 +92,7 @@ module.exports = function (client) {
                         var codeNames = ['online', 'dnd', 'idle']
                         var Crstatus = codeNames[code] ? codeNames[code] : code;
                         if (!codeNames.includes(Crstatus)) new DscbotsError("Invalid status code found!");
-                        status = Crstatus;
+                        botData.status = Crstatus;
 
                         setTimeout(function () {
                             data_op[3]()
@@ -120,7 +120,7 @@ module.exports = function (client) {
                         if (!type || typeof (type) != 'string') return new DscbotsError("The status must be a string");
                         //console.log(activities_name[type])
                         if (typeof (activities_name[type]) != 'number') new DscbotsError("The activity type is invalid!")
-                        presence = {
+                        botData.presence = {
                             name: message,
                             type: activities_name[type]
                         }
@@ -468,8 +468,8 @@ module.exports = function (client) {
                 socketEmitter.send(JSON.stringify({
                     "op": 3,
                     "d": {
-                        "activities": [presence],
-                        "status": status,
+                        "activities": [botData.presence],
+                        "status": botData.status,
                         "since": 91879201,
                         "afk": false
                     },
@@ -484,6 +484,7 @@ module.exports = function (client) {
                 }
 
                 session.heartbeat_interval = payloadData.heartbeat_interval;
+                console.log(client)
 
                 session.resuming ? socketEmitter.send(JSON.stringify({ "op": 6, "d": { "token": client.Token, "session_id": session.resume_session_id, "seq": session.resume_seq } }))
                     : socketEmitter.send(JSON.stringify({
