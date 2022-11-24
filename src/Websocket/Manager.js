@@ -66,12 +66,12 @@ module.exports = function (client) {
                         console.info(timestamp.default(), 'Session created, Service Ready.\n');
                     }
                     // Return Data \\
-                    clientData.user = payloadData.user;
-                    clientData.username = payloadData.user.username;
-                    clientData.id = payloadData.user.id;
-                    clientData.avatar = payloadData.user.avatar;
-                    clientData.user.tag = payloadData.user.username + '#' + payloadData.user.discriminator;
-                    clientData.user.AvatarURL = function (Avataroptions = {}) {
+                    client.user = payloadData.user;
+                    client.username = payloadData.user.username;
+                    client.id = payloadData.user.id;
+                    client.avatar = payloadData.user.avatar;
+                    client.user.tag = payloadData.user.username + '#' + payloadData.user.discriminator;
+                    client.user.AvatarURL = function (Avataroptions = {}) {
                         const format = Avataroptions?.format;
                         if (format) {
                             if (typeof format != 'string') return new DscbotsError("Image format must be an string.");
@@ -86,7 +86,7 @@ module.exports = function (client) {
                      * 
                      * @param {String|Number} code - Type of status. 
                      */
-                    clientData.user.setStatus = function (code) {
+                    client.user.setStatus = function (code) {
                         var codeTypes = [0, 1, 2]
                         if (!codeTypes.includes(code) && typeof (code) != 'string') new DscbotsError("Invalid status code!");
                         var codeNames = ['online', 'dnd', 'idle']
@@ -99,15 +99,15 @@ module.exports = function (client) {
                         }, 1500)
                     }
 
-                    clientData.user.guilds = Requests.get('https://discord.com/api/v10/users/@me/guilds', {
+                    client.user.guilds = Requests.get('https://discord.com/api/v10/users/@me/guilds', {
                         Authorization: `Bot ${client.Token}`
                     })
                         .then(DiscordResponse => DiscordResponse);
 
-                    if (clientData.user.guilds.length != 0) {
-                        clientData.user.guilds.size = clientData.user.guilds.length
-                    } else if (clientData.user.guilds.length == 0) {
-                        clientData.user.guilds.size = 0
+                    if (client.user.guilds.length != 0) {
+                        client.user.guilds.size = client.user.guilds.length
+                    } else if (client.user.guilds.length == 0) {
+                        client.user.guilds.size = 0
                     }
 
                     /**
@@ -115,7 +115,7 @@ module.exports = function (client) {
                      * @param {String} message - The message it will display on the status.
                      * @param {String|Number} type - The type of status it will display.
                      */
-                    clientData.user.setActivity = function (message, type) {
+                    client.user.setActivity = function (message, type) {
                         if (!message || typeof (message) != 'string') return new DscbotsError("The message must be a string!");
                         if (!type || typeof (type) != 'string') return new DscbotsError("The status must be a string");
                         //console.log(activities_name[type])
@@ -130,8 +130,8 @@ module.exports = function (client) {
                     }
 
                     if (reconnect != true || reconnect == false) {
-                        clientData.websocket.ping = 0;
-                        clientData.readyCB ? clientData.readyCB() : null;
+                        client.websocket.ping = 0;
+                        client.readyCB ? client.readyCB() : null;
                     }
                 },
                 "MESSAGE_CREATE": async () => {
@@ -335,7 +335,7 @@ module.exports = function (client) {
                     }
 
                     message.edit = function (MessageContent, Data) {
-                        if (payloadData.author.id === clientData.user.id) {
+                        if (payloadData.author.id === client.user.id) {
                             if (!MessageContent && !Data) return new DscbotsError("Content must be provided when sending an message.");
                             if (typeof MessageContent === 'object') {
                                 if (!Data) {
@@ -417,7 +417,7 @@ module.exports = function (client) {
                         })
                     };
 
-                    clientData.emit('message', message);
+                    client.emit('message', message);
                 }
             }
 
@@ -471,18 +471,18 @@ module.exports = function (client) {
 
                 session.heartbeat_interval = payloadData.heartbeat_interval;
 
-                session.resuming ? socketEmitter.send(JSON.stringify({ "op": 6, "d": { "token": clientData.Token, "session_id": session.resume_session_id, "seq": session.resume_seq } }))
+                session.resuming ? socketEmitter.send(JSON.stringify({ "op": 6, "d": { "token": client.Token, "session_id": session.resume_session_id, "seq": session.resume_seq } }))
                     : socketEmitter.send(JSON.stringify({
                         "op": 2,
                         "d": {
-                            "token": clientData.Token,
+                            "token": client.Token,
                             "properties": {
                                 "os": platfrom,
-                                "browser": clientData.device,
-                                "device": clientData.device?.replace(/Discord/g, '')
+                                "browser": client.device,
+                                "device": client.device?.replace(/Discord/g, '')
                             },
                             "shard": [0, 1],
-                            "intents": clientData.intents,
+                            "intents": client``.intents,
                         }
                     }));
             };
