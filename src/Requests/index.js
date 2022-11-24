@@ -22,7 +22,6 @@ module.exports.get = async function (Uri, Options) {
         headers
     })
         .then(response => {
-            console.log(response.status)
             if (!(DetectedStatuses.includes(response.status)))
                 return response.json ? response.json() : response.text();
             else if (DetectedStatuses.includes(response.status) && response.statusText !== 'Unauthorized') {
@@ -70,7 +69,6 @@ module.exports.post = async function (Uri, Options) {
         headers
     })
         .then(response => {
-            console.log(response.status)
             if (!(DetectedStatuses.includes(response.status)))
                 return response.json ? response.json() : response.text();
             else if (DetectedStatuses.includes(response.status) && response.statusText !== 'Unauthorized') {
@@ -115,7 +113,6 @@ module.exports.delete = async function (Uri, Options) {
         headers
     })
         .then(response => {
-            console.log(response.status)
             if (!(DetectedStatuses.includes(response.status)))
                 return response.json ? response.json() : response.text();
             else if (DetectedStatuses.includes(response.status) && response.statusText !== 'Unauthorized') {
@@ -163,7 +160,7 @@ module.exports.patch = async function (Uri, Options) {
         headers
     })
         .then(response => {
-            console.log(response.status)
+            
             if (!(DetectedStatuses.includes(response.status)))
                 return response.json ? response.json() : response.text();
             else if (DetectedStatuses.includes(response.status) && response.statusText !== 'Unauthorized') {

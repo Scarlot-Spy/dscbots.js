@@ -1,7 +1,6 @@
 const WebSocket = require('ws');
 const api = require(`mapih`);
 const platfrom = require("os").platform();
-const fetch = require('node-fetch');
 const gateway_url = 'wss://gateway.discord.gg/?v=10&encoding=json';
 const timestamp = api.Utils.Timestamp;
 const Requests = require('../Requests/index');
@@ -75,8 +74,8 @@ module.exports = function (client) {
                     clientData.user.AvatarURL = function (Avataroptions = {}) {
                         const format = Avataroptions?.format;
                         if (format) {
-                            if (typeof format != 'string') return global._Error("Image format must be an string.");
-                            if (!Formats[format]) return global._Error("Invalid image format!");
+                            if (typeof format != 'string') return new DscbotsError("Image format must be an string.");
+                            if (!Formats[format]) return new DscbotsError("Invalid image format!");
 
                             return `https://cdn.discordapp.com/avatars/${payloadData.user.id}/${payloadData.user.avatar}.${Formats[format]}`
                         } else {
@@ -89,10 +88,10 @@ module.exports = function (client) {
                      */
                     clientData.user.setStatus = function (code) {
                         var codeTypes = [0, 1, 2]
-                        if (!codeTypes.includes(code) && typeof (code) != 'string') global._Error("Invalid status code!");
+                        if (!codeTypes.includes(code) && typeof (code) != 'string') new DscbotsError("Invalid status code!");
                         var codeNames = ['online', 'dnd', 'idle']
                         var Crstatus = codeNames[code] ? codeNames[code] : code;
-                        if (!codeNames.includes(Crstatus)) global._Error("Invalid status code found!");
+                        if (!codeNames.includes(Crstatus)) new DscbotsError("Invalid status code found!");
                         status = Crstatus;
 
                         setTimeout(function () {
@@ -117,10 +116,10 @@ module.exports = function (client) {
                      * @param {String|Number} type - The type of status it will display.
                      */
                     clientData.user.setActivity = function (message, type) {
-                        if (!message || typeof (message) != 'string') return global._Error("The message must be a string!");
-                        if (!type || typeof (type) != 'string') return global._Error("The status must be a string");
+                        if (!message || typeof (message) != 'string') return new DscbotsError("The message must be a string!");
+                        if (!type || typeof (type) != 'string') return new DscbotsError("The status must be a string");
                         //console.log(activities_name[type])
-                        if (typeof (activities_name[type]) != 'number') global._Error("The activity type is invalid!")
+                        if (typeof (activities_name[type]) != 'number') new DscbotsError("The activity type is invalid!")
                         presence = {
                             name: message,
                             type: activities_name[type]
@@ -166,8 +165,8 @@ module.exports = function (client) {
                     message.author.AvatarURL = function (Avataroptions = {}) {
                         const format = Avataroptions?.format;
                         if (format) {
-                            if (typeof format != 'string') return global._Error("Image format must be an string.");
-                            if (!Formats[format]) return global.DiscordError("Invalid image format!");
+                            if (typeof format != 'string') return new DscbotsError("Image format must be an string.");
+                            if (!Formats[format]) return new DiscordError("Invalid image format!");
 
                             return `https://cdn.discordapp.com/avatars/${payloadData.author.id}/${payloadData.author.avatar}.${Formats[format]}`
                         } else {
@@ -176,14 +175,14 @@ module.exports = function (client) {
                     }
 
                     message.channel.send = async function (MessageContent, Data) {
-                        if (!MessageContent && !Data) return global._Error("Content must be provided when sending an message.");
+                        if (!MessageContent && !Data) return new DscbotsError("Content must be provided when sending an message.");
                         if (typeof MessageContent === 'object') {
                             if (!Data) {
                                 Data = MessageContent;
-                            } else if (Data) return global._Error("You cannot have Data!")
+                            } else if (Data) return new DscbotsError("You cannot have Data!")
                         } if (typeof MessageContent === "string" && !Data) {
-                            if (MessageContent == '') return global._Error("Content must be provided!");
-                        } else if (typeof MessageContent != 'string' && typeof Content != 'object') return global._Error("Unknown content type.");
+                            if (MessageContent == '') return new DscbotsError("Content must be provided!");
+                        } else if (typeof MessageContent != 'string' && typeof Content != 'object') return new DscbotsError("Unknown content type.");
                         var embeds = [];
                         var components = [];
 
@@ -250,14 +249,14 @@ module.exports = function (client) {
                     };
 
                     message.reply = async function (MessageContent, Data) {
-                        if (!MessageContent && !Data) return global._Error("Content must be provided when sending an message.");
+                        if (!MessageContent && !Data) return new DscbotsError("Content must be provided when sending an message.");
                         if (typeof MessageContent === 'object') {
                             if (!Data) {
                                 Data = MessageContent;
-                            } else if (Data) return global._Error("You cannot have Data!")
+                            } else if (Data) return new DscbotsError("You cannot have Data!")
                         } if (typeof MessageContent === "string" && !Data) {
-                            if (MessageContent == '') return global._Error("Content must be provided!");
-                        } else if (typeof MessageContent != 'string' && typeof Content != 'object') return global._Error("Unknown content type.");
+                            if (MessageContent == '') return new DscbotsError("Content must be provided!");
+                        } else if (typeof MessageContent != 'string' && typeof Content != 'object') return new DscbotsError("Unknown content type.");
                         var embeds = [];
                         var components = [];
 
@@ -337,14 +336,14 @@ module.exports = function (client) {
 
                     message.edit = function (MessageContent, Data) {
                         if (payloadData.author.id === clientData.user.id) {
-                            if (!MessageContent && !Data) return global._Error("Content must be provided when sending an message.");
+                            if (!MessageContent && !Data) return new DscbotsError("Content must be provided when sending an message.");
                             if (typeof MessageContent === 'object') {
                                 if (!Data) {
                                     Data = MessageContent;
-                                } else if (Data) return global._Error("You cannot have Data!")
+                                } else if (Data) return new DscbotsError("You cannot have Data!")
                             } if (typeof MessageContent === "string" && !Data) {
-                                if (MessageContent == '') return global._Error("Content must be provided!");
-                            } else if (typeof MessageContent != 'string' && typeof Content != 'object') return global._Error("Unknown content type.");
+                                if (MessageContent == '') return new DscbotsError("Content must be provided!");
+                            } else if (typeof MessageContent != 'string' && typeof Content != 'object') return new DscbotsError("Unknown content type.");
                             var embeds = [];
                             var components = [];
 
@@ -421,6 +420,107 @@ module.exports = function (client) {
                     clientData.emit('message', message);
                 }
             }
-        })
+
+            var data_op = [];
+
+            data_op[0] = () => {
+                try {
+                    (data_t[data.t]) ? data_t[data.t]() : (async () => {
+                        events.emit(`${data.t}`.toLowerCase(), payloadData);
+                    })();
+                } catch (e) {
+                    new DiscordError(e.stack.toString())
+                }
+            }
+
+            data_op[1] = async () => {
+                if (process.env.DEBUG == "true")
+                    console.info(timestamp.default(), 'Heartbeat Requested');
+                FIRST = Date.now()
+                socketEmitter.send(JSON.stringify({ "op": 1, "d": session.seq }));
+            };
+
+            data_op[7] = async () => {
+                socketEmitter.close(1012);
+            };
+
+            data_op[9] = async () => {
+                if (process.env.DEBUG == "true")
+                    console.log('OpCode: 9 -- data.d', data.d);
+                (data.d) ? socketEmitter.close(5000) : socketEmitter.close(1011);
+            };
+
+            data_op[3] = async () => {
+                socketEmitter.send(JSON.stringify({
+                    "op": 3,
+                    "d": {
+                        "activities": [presence],
+                        "status": status,
+                        "since": 91879201,
+                        "afk": false
+                    },
+                }));
+            }
+
+            data_op[10] = async () => {
+                if (process.env.DEBUG == "true") {
+                    console.info(timestamp.default(), '-----------------------------------------------------');
+                    console.info(timestamp.default(), `{-= Gateway: "Hello" =-}`);
+                    console.info(timestamp.default(), '-----------------------------------------------------');
+                }
+
+                session.heartbeat_interval = payloadData.heartbeat_interval;
+
+                session.resuming ? socketEmitter.send(JSON.stringify({ "op": 6, "d": { "token": clientData.Token, "session_id": session.resume_session_id, "seq": session.resume_seq } }))
+                    : socketEmitter.send(JSON.stringify({
+                        "op": 2,
+                        "d": {
+                            "token": clientData.Token,
+                            "properties": {
+                                "os": platfrom,
+                                "browser": clientData.device,
+                                "device": clientData.device?.replace(/Discord/g, '')
+                            },
+                            "shard": [0, 1],
+                            "intents": clientData.intents,
+                        }
+                    }));
+            };
+
+            data_op[11] = async () => {
+                if (process.env.DEBUG == "true")
+                    console.info(timestamp.default(), 'Heartbeat Acknowledged');
+                session.heartbeatACK = true;
+            };
+
+            try {
+                data_op[data.op]();
+            } catch (e) {
+                new DiscordError(e.stack.toString())
+            }
+        });
+
+        socketEmitter.on('close', code => {
+            clearInterval(session.hb);
+
+            if (code == 4014) {
+                new DiscordError('Disallowed intents provided!')
+            } else if (code == 4013) {
+                new DiscordError('Invalid intents provided!')
+            } else if (code == 4008) {
+                new DiscordError("You've been ratelimited...")
+            } else if (code == 4011) {
+                new DiscordError("The application must enable sharding!")
+            }
+
+            RESUMEABLE[code] ? (() => {
+                session.resume_seq = session.seq;
+                session.resuming = true;
+                setTimeout(function () { sessionStart(session.resume_gateway_url, true) }, 1000);
+            })() : (() => {
+                session.restarting = true;
+                setTimeout(function () { sessionStart(gateway_url1, true) }, 1000);
+            })()
+        }, { once: true });
     }
 };
