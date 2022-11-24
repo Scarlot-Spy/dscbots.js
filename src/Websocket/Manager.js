@@ -418,6 +418,20 @@ module.exports = function (client) {
                     };
 
                     client.emit('message', message);
+                },
+                "RESUMED": async () => {
+                    session.hb = setInterval(() => {
+                        if (session.heartbeatACK) {
+                            if (process.env.DEBUG == "true")
+                                console.info(timestamp.default(), 'Heartbeat');
+                            session.heartbeatACK = false;
+
+                            socketEmitter.send(JSON.stringify({ "op": 1, "d": session.seq }));
+                        } else socketEmitter.close(1002);
+                    }, session.heartbeat_interval);
+                    if (process.env.DEBUG == "true")
+                        console.info(timestamp.default(), 'Gateway: Resumed', payloadData);
+                    clientData.emit('resumed', payloadData);
                 }
             }
 
