@@ -1,0 +1,25 @@
+{
+  "name": "dscbots.js",
+  "version": "10.3.7",
+  "description": "Make discord bots with this simple to use Package.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Discord",
+    "Bot",
+    "Discord.js",
+    "Dscbots",
+    "Robot",
+    "Api"
+  ],
+  "repository": "https://github.com/Scarlot-Spy/Dscbots.js",
+  "author": "Scamlot (Scam Spy)",
+  "license": "MIT",
+  "dependencies": {
+    "mapih": "^1.1.5",
+    "node-fetch": "^2.6.3",
+    "ws": "^8.11.0"
+  }
+}
